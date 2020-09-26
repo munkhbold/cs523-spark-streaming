@@ -22,7 +22,9 @@ To do this, we are going to set up an environment that includes
 
 
 ## Installation
+
 `pip3 install tweepy` 
+`pip3 install pyspark` 
 
 
 ## Run the demo project
@@ -58,15 +60,34 @@ Now make a new topic named `tweets`
 ~/kafka$ bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic tweets
 ```
 
-* ### Terminal 4 -- Hive Metastore
+* ### Terminal 4 - Hadoop
 
-hive --services metastore
+```bash
+~$ hdfs namenode -format
+~$ start-dfs.sh
+```
 
-* ### Terminal 5 -- Hive
+* ### Terminal 5 -- Hive Metastore
+
+```
+~/$ hive --service metastore
+```
+
+* ### Terminal 6 -- Hive
+
+Make the database for storing our Twitter data:
+
+``` bash
+hive> CREATE TABLE tweets (text STRING, words INT, length INT)
+    > ROW FORMAT DELIMITED FIELDS TERMINATED BY '\\|'
+    > STORED AS TEXTFILE;
+```
+
+You can use `SHOW TABLES;` to double check that the table was created.
 
 In order to make sure the transformed data is being stored in Hive, we need to enter the Hive shell so that we can query the tables
 
-```
+```bash
 ~$ hive
 
  ...
@@ -75,15 +96,15 @@ hive> use default;
 hive> select count(*) from tweets;
 ```
 
-* ### Terminal 6 -- Stream Producer
+* ### Terminal 7 -- Stream Producer
 
 In this new terminal, we are going to run the stream producer
 
 ```~$ python3 tweet_stream.py```
 
-* ### Terminal 7 -- Stream Consumer + Spark Transformer
+* ### Terminal 8 -- Stream Consumer + Spark Transformer
 
 Now we are ready to run the consumer. You can download `spark-streaming-kafka-0-8-assembly_2.11-2.4.7.jar` from [search.maven.org](https://search.maven.org/search?q=a:spark-streaming-kafka-0-8-assembly_2.11).
 ```
-~$ spark-submit --jars spark-streaming-kafka-0-8-assembly_2.11-2.4.3.jar transformer.py
+~$ spark-submit --jars spark-streaming-kafka-0-8-assembly_2.11-2.4.7.jar transformer.py
 ```
