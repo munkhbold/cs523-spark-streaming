@@ -6,11 +6,6 @@ When considering this POC, I choose Twitter which is great source of streamed da
 * calculate the character count and word count for each tweet
 * save this data to a Hive table
 
-To do this, we are going to set up an environment that includes 
-* a single-node Kafka cluster
-* a single-node Hadoop cluster
-* Hive and Spark
-
 ---
 
 ## Requirements
@@ -23,13 +18,15 @@ To do this, we are going to set up an environment that includes
 
 ## Installation
 
-`pip3 install tweepy` 
-`pip3 install pyspark` 
+```bash
+~$ pip3 install tweepy
+~$ pip3 install pyspark
+```
 
 
 ## Run the demo project
 
-* ### Terminal 1 -- Zookeeper
+* ### Terminal 1 -- Zookeeper (Kafka cluster)
 
 This is required for running a Kafka cluster.
 
@@ -37,7 +34,7 @@ This is required for running a Kafka cluster.
 ~/kafka$ bin/zookeeper-server-start.sh config/zookeeper.properties
 ```
 
-* ### Terminal 2 -- Zookeeper
+* ### Terminal 2 -- Zookeeper (Kafka broker)
 
 Now we need to start the Kafka broker.
 
